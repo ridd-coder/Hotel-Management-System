@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin — Rooms</title>
+<link rel="stylesheet" href="style.css">
+<style>
+.page-wrapper {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.main-content {
+  flex: 1;
+}
+
+.admin-grid {
+  display: grid;
+  grid-template-columns: 1.6fr 1fr;
+  gap: 20px;
+}
+
+.table-wrapper {
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th, td {
+  padding: 10px;
+  border-bottom: 1px solid var(--border);
+  text-align: left;
+}
+
+th {
+  background: var(--bg-secondary);
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+}
+
+.row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.actions {
+  display: flex;
+  gap: 8px;
+}
+
+.badge-admin {
+  background: rgba(34,193,255,0.15);
+  color: #22c1ff;
+  border: 1px solid rgba(34,193,255,0.3);
+  padding: 6px 10px;
+  border-radius: 6px;
+}
+
+.toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+</style>
+</head>
+<body>
+
+<div class="page-wrapper">
+
+<nav>
+  <div class="flex-between">
+    <div>
+      <a href="index.html">Home</a>
+      <a href="admin_dashboard.html">Dashboard</a>
+      <a href="admin_staff.html">Staff</a>
+      <a href="admin_bookings.html">Bookings</a>
+    </div>
+    <div class="badge-admin">Admin — Rooms</div>
+  </div>
+</nav>
+
+<header style="background:linear-gradient(to right,#020617,#0f172a);padding:40px 0;border-bottom:1px solid var(--border);">
+  <div class="container text-center">
+    <h1>Room Management</h1>
+    <p>Add, edit, and manage rooms and availability</p>
+  </div>
+</header>
+
+<div class="main-content">
+<div class="container">
+
+<div class="toolbar">
+  <div>
+    <select id="adminHotelSelect"></select>
+    <button class="secondary" onclick="loadAdminRooms()">Load Rooms</button>
+  </div>
+  <div>
+    <button onclick="clearRoomForm()">New Room</button>
+  </div>
+</div>
+
+<div class="admin-grid">
+
+<div class="card table-wrapper">
+<h3>Room List</h3>
+<table>
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Type</th>
+      <th>Price/Night</th>
+      <th>Status</th>
+      <th>Hotel</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody id="roomTableBody"></tbody>
+</table>
+</div>
+
+<div class="card">
+<h3 id="formTitle">Add Room</h3>
+
+<div class="form-grid">
+  <input type="hidden" id="editRoomId">
+
+  <label>Room Type</label>
+  <input type="text" id="roomType">
+
+  <label>Price per Night</label>
+  <input type="number" id="roomPrice">
+
+  <label>Availability</label>
+  <select id="roomStatus">
+    <option value="Available">Available</option>
+    <option value="Booked">Booked</option>
+    <option value="Maintenance">Maintenance</option>
+  </select>
+
+  <label>Hotel</label>
+  <select id="roomHotel"></select>
+
+  <div class="row" style="margin-top:10px;">
+    <button onclick="addRoom()" id="addBtn">Add Room</button>
+    <button class="secondary" onclick="updateRoom()" id="updateBtn" style="display:none;">Update Room</button>
+  </div>
+</div>
+</div>
+
+</div>
+</div>
+
+<footer style="background:var(--bg-secondary);border-top:1px solid var(--border);margin-top:40px;">
+  <div class="container text-center muted-text">
+    Hotel Management System © 2025
+  </div>
+</footer>
+
+</div>
+
+<script src="script.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  loadAdminHotels();
+  loadAdminRooms();
+});
+</script>
+
+</body>
+</html>

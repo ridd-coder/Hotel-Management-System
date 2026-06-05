@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Browse available hotels in the Hotel Management System">
+<title>Hotels - Hotel Management</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<nav>
+  <div class="flex-between">
+    <div>
+      <a href="index.html">Home</a>
+      <a href="login.html">Login</a>
+      <a href="hotels.html">Hotels</a>
+      <a href="mybookings.html">My Bookings</a>
+    </div>
+    <div class="badge success">Browse Hotels</div>
+  </div>
+</nav>
+
+<header style="background:linear-gradient(to right,#020617,#0f172a);padding:40px 0;border-bottom:1px solid var(--border);">
+  <div class="container text-center">
+    <h1>Find Your Perfect Stay</h1>
+    <p>Explore top-rated hotels, compare prices, and book instantly.</p>
+  </div>
+</header>
+
+<div class="container">
+
+  <div class="flex-between mb-2">
+    <h2>Available Hotels</h2>
+    <div class="flex">
+      <select id="sortHotels" style="max-width:180px;">
+        <option value="default">Sort By</option>
+        <option value="rating">Rating (High to Low)</option>
+        <option value="name">Name (A-Z)</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="card shadow-sm mb-2">
+    <div class="flex-between">
+      <div>
+        <h3>Filters</h3>
+        <p style="font-size:13px;">Use filters to refine your search</p>
+      </div>
+      <button class="secondary" id="resetFilters">Reset</button>
+    </div>
+
+    <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(200px,1fr));">
+      <div>
+        <label>Location</label>
+        <input type="text" id="filterLocation" placeholder="e.g. Delhi, Mumbai">
+      </div>
+      <div>
+        <label>Minimum Rating</label>
+        <select id="filterRating">
+          <option value="">Any</option>
+          <option value="4.0">4.0+</option>
+          <option value="4.5">4.5+</option>
+          <option value="4.8">4.8+</option>
+        </select>
+      </div>
+      <div>
+        <label>Search Hotel</label>
+        <input type="text" id="searchHotel" placeholder="Search by name">
+      </div>
+    </div>
+  </div>
+
+  <div id="hotelList" class="grid"></div>
+
+  <div class="text-center mt-3">
+    <button class="secondary" id="loadAgain">Refresh List</button>
+  </div>
+
+</div>
+
+<footer style="background:var(--bg-secondary);border-top:1px solid var(--border);margin-top:40px;">
+  <div class="container">
+    <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(220px,1fr));">
+      <div>
+        <h3>About</h3>
+        <p>Hotel Management System is a simple yet powerful platform to browse hotels, book rooms, and manage reservations.</p>
+      </div>
+      <div>
+        <h3>Quick Links</h3>
+        <p><a href="index.html">Home</a></p>
+        <p><a href="login.html">Login</a></p>
+        <p><a href="hotels.html">Hotels</a></p>
+        <p><a href="mybookings.html">My Bookings</a></p>
+      </div>
+      <div>
+        <h3>Support</h3>
+        <p>Email: support@hotelms.com</p>
+        <p>Phone: +91 99999 88888</p>
+      </div>
+      <div>
+        <h3>Legal</h3>
+        <p>Terms of Service</p>
+        <p>Privacy Policy</p>
+      </div>
+    </div>
+    <hr class="mt-3 mb-2">
+    <div class="text-center muted-text">
+      Hotel Management System © 2025
+    </div>
+  </div>
+</footer>
+
+<script src="script.js"></script>
+
+<script>
+window.addEventListener("DOMContentLoaded", () => {
+
+  const sortSelect = document.getElementById("sortHotels");
+  const filterLocation = document.getElementById("filterLocation");
+  const filterRating = document.getElementById("filterRating");
+  const searchHotel = document.getElementById("searchHotel");
+  const resetBtn = document.getElementById("resetFilters");
+  const refreshBtn = document.getElementById("loadAgain");
+  const hotelList = document.getElementById("hotelList");
+
+  let allHotels = [];
+
+  async function fetchHotels() {
+    const res = await fetch("http://localhost:4000/hotels");
+    allHotels = await res.json();
+    renderHotels(allHotels);
+  }
+
+  function renderHotels(hotels) {
+    hotelList.innerHTML = "";
+
+    if (!hotels || hotels.length === 0) {
+      const msg = document.createElement("div");
+      msg.className = "card text-center";
+      msg.innerHTML = "<h3>No hotels found</h3>";
+      hotelList.appendChild(msg);
+      return;
+    }
+
+    hotels.forEach(h => {
+      const card = document.createElement("div");
+      card.className = "card fade-in";
+
+      card.innerHTML = `
+        <h3>${h.name}</h3>
+        <p>${h.location}</p>
+        <p>Rating: ⭐ ${h.rating ?? "N/A"}</p>
+        <div class="mt-1 flex-between">
+          <span class="badge success">Available</span>
+          <button class="primary view-rooms-btn" data-hotel="${h.hotel_id}">
+            View Rooms
+          </button>
+        </div>
+      `;
+
+      hotelList.appendChild(card);
+    });
+  }
+
+  function applyFilters() {
+    let filtered = [...allHotels];
+
+    const loc = filterLocation.value.trim().toLowerCase();
+    if (loc) {
+      filtered = filtered.filter(h =>
+        h.location && h.location.toLowerCase().includes(loc)
+      );
+    }
+
+    const minRating = filterRating.value;
+    if (minRating) {
+      filtered = filtered.filter(h =>
+        parseFloat(h.rating) >= parseFloat(minRating)
+      );
+    }
+
+    const search = searchHotel.value.trim().toLowerCase();
+    if (search) {
+      filtered = filtered.filter(h =>
+        h.name && h.name.toLowerCase().includes(search)
+      );
+    }
+
+    const sortVal = sortSelect.value;
+    if (sortVal === "rating") {
+      filtered.sort((a, b) => b.rating - a.rating);
+    } else if (sortVal === "name") {
+      filtered.sort((a, b) => a.name.localeCompare(b.name));
+    }
+
+    renderHotels(filtered);
+  }
+
+  sortSelect.addEventListener("change", applyFilters);
+  filterLocation.addEventListener("input", applyFilters);
+  filterRating.addEventListener("change", applyFilters);
+  searchHotel.addEventListener("input", applyFilters);
+
+  resetBtn.addEventListener("click", () => {
+    filterLocation.value = "";
+    filterRating.value = "";
+    searchHotel.value = "";
+    sortSelect.value = "default";
+    renderHotels(allHotels);
+  });
+
+  refreshBtn.addEventListener("click", () => {
+    fetchHotels();
+  });
+
+  // ─── View Rooms: delegated click on dynamically rendered cards ───
+  hotelList.addEventListener("click", (e) => {
+    const btn = e.target.closest(".view-rooms-btn");
+    if (!btn) return;
+    const hotelId = btn.getAttribute("data-hotel");
+    localStorage.setItem("selected_hotel_id", hotelId);
+    window.location.href = "rooms.html?hotel_id=" + hotelId;
+  });
+
+  window.addEventListener("scroll", () => {
+    const nav = document.querySelector("nav");
+    if (window.scrollY > 10) {
+      nav.classList.add("shadow-md");
+    } else {
+      nav.classList.remove("shadow-md");
+    }
+  });
+
+  // INITIAL LOAD
+  fetchHotels();
+
+});
+</script>
+
+</body>
+</html>

@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Receipt / Invoice</title>
+<link rel="stylesheet" href="style.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<style>
+.receipt-box {
+  max-width: 900px;
+  margin: 20px auto;
+}
+
+.receipt-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.receipt-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table th, .table td {
+  padding: 10px;
+  border-bottom: 1px solid var(--border);
+}
+
+.table th {
+  text-align: left;
+}
+
+.total-row {
+  font-weight: bold;
+}
+
+.actions {
+  margin-top: 20px;
+  display: flex;
+  gap: 10px;
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="flex-between">
+    <div>
+      <a href="index.html">Home</a>
+      <a href="hotels.html">Hotels</a>
+      <a href="mybookings.html">My Bookings</a>
+    </div>
+    <div class="badge success">Receipt</div>
+  </div>
+</nav>
+
+<header style="background:linear-gradient(to right,#020617,#0f172a);padding:30px 0;border-bottom:1px solid var(--border);">
+  <div class="container text-center">
+    <h1>Invoice</h1>
+    <p>Booking Receipt</p>
+  </div>
+</header>
+
+<div class="container receipt-box">
+
+<div class="card" id="invoiceCard">
+
+<div class="receipt-header">
+  <h2>Hotel Management System</h2>
+  <div class="actions" data-html2canvas-ignore="true">
+    <button onclick="window.print()">Print</button>
+    <button onclick="downloadPDF()">Download PDF</button>
+  </div>
+</div>
+
+<div class="receipt-grid">
+
+<div>
+<h3>Booking Details</h3>
+<p><b>Booking ID:</b> <span id="rBookingId"></span></p>
+<p><b>Guest:</b> <span id="rGuest"></span></p>
+<p><b>Email:</b> <span id="rEmail"></span></p>
+<p><b>Room ID:</b> <span id="rRoom"></span></p>
+<p><b>Check-in:</b> <span id="rCheckIn"></span></p>
+<p><b>Check-out:</b> <span id="rCheckOut"></span></p>
+<p><b>Nights:</b> <span id="rNights"></span></p>
+</div>
+
+<div>
+<h3>Payment</h3>
+<p><b>Method:</b> <span id="rMethod"></span></p>
+<p><b>Status:</b> <span id="rStatus"></span></p>
+<p><b>Date:</b> <span id="rDate"></span></p>
+</div>
+
+</div>
+
+<hr>
+
+<h3>Cost Breakdown</h3>
+
+<table class="table">
+  <tr>
+    <th>Item</th>
+    <th>Details</th>
+    <th>Amount (₹)</th>
+  </tr>
+  <tr>
+    <td>Price per night</td>
+    <td id="rPricePerNight"></td>
+    <td id="rPricePerNightAmt"></td>
+  </tr>
+  <tr>
+    <td>Nights stayed</td>
+    <td id="rNightsStayed"></td>
+    <td>-</td>
+  </tr>
+  <tr>
+    <td>Room Subtotal</td>
+    <td>-</td>
+    <td id="rRoomSubtotal"></td>
+  </tr>
+</table>
+
+<h3>Services</h3>
+<table class="table" id="servicesTable">
+  <tr>
+    <th>Service</th>
+    <th>Cost (₹)</th>
+  </tr>
+</table>
+
+<hr>
+
+<p class="total-row">Grand Total: ₹<span id="rGrandTotal"></span></p>
+
+</div>
+
+</div>
+
+<footer style="background:var(--bg-secondary);border-top:1px solid var(--border);margin-top:40px;">
+  <div class="container text-center muted-text">
+    Hotel Management System © 2025
+  </div>
+</footer>
+
+<script>
+const API = "http://localhost:4000";
+
+function getParam(name) {
+  const params = new URLSearchParams(window.location.search);
+  return params.get(name);
+}
+
+async function loadReceipt() {
+  const bookingId = getParam("booking_id");
+
+  if (!bookingId) {
+    alert("Invalid receipt");
+    window.location.href = "mybookings.html";
+    return;
+  }
+
+  try {
+    const res = await fetch(`${API}/receipt/${bookingId}`);
+    const data = await res.json();
+
+    // Booking Details
+    document.getElementById("rBookingId").innerText = data.booking_id;
+    document.getElementById("rGuest").innerText = data.guest_name;
+    document.getElementById("rEmail").innerText = data.email;
+    document.getElementById("rRoom").innerText = data.room_id;
+    document.getElementById("rCheckIn").innerText = data.check_in;
+    document.getElementById("rCheckOut").innerText = data.check_out;
+    document.getElementById("rNights").innerText = data.nights;
+
+    // Payment
+    document.getElementById("rMethod").innerText = data.payment_method;
+    document.getElementById("rStatus").innerText = data.payment_status;
+    document.getElementById("rDate").innerText = data.payment_date;
+
+    // Cost Breakdown
+    document.getElementById("rPricePerNight").innerText = `₹${data.price_per_night}`;
+    document.getElementById("rPricePerNightAmt").innerText = `₹${data.price_per_night}`;
+    document.getElementById("rNightsStayed").innerText = data.nights;
+    document.getElementById("rRoomSubtotal").innerText = `₹${data.room_subtotal}`;
+
+    // Services
+    const servicesTable = document.getElementById("servicesTable");
+
+    if (data.services && data.services.length > 0) {
+      data.services.forEach(s => {
+        const row = document.createElement("tr");
+        row.innerHTML = `
+          <td>${s.service_name}</td>
+          <td>₹${s.cost}</td>
+        `;
+        servicesTable.appendChild(row);
+      });
+    } else {
+      const row = document.createElement("tr");
+      row.innerHTML = `<td colspan="2">No additional services</td>`;
+      servicesTable.appendChild(row);
+    }
+
+    // Grand Total
+    document.getElementById("rGrandTotal").innerText = data.grand_total;
+
+  } catch (err) {
+    console.error(err);
+    alert("Failed to load receipt");
+  }
+}
+
+function downloadPDF() {
+  const element = document.getElementById('invoiceCard');
+  const opt = {
+    margin:       [0.5, 0.5, 0.5, 0.5],
+    filename:     'LuxeStay-Receipt-' + document.getElementById('rBookingId').innerText + '.pdf',
+    image:        { type: 'jpeg', quality: 0.98 },
+    html2canvas:  { scale: 2, useCORS: true, logging: false },
+    jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
+  };
+  
+  // Temporarily adjust styling for PDF rendering if needed
+  html2pdf().set(opt).from(element).save();
+}
+
+document.addEventListener("DOMContentLoaded", loadReceipt);
+</script>
+
+</body>
+</html>

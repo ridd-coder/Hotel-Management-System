@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin — Bookings</title>
+<link rel="stylesheet" href="style.css">
+<style>
+.page-wrapper {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.main-content {
+  flex: 1;
+}
+
+.table-wrapper {
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th, td {
+  padding: 10px;
+  border-bottom: 1px solid var(--border);
+  text-align: left;
+}
+
+th {
+  background: var(--bg-secondary);
+}
+
+.toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.badge-admin {
+  background: rgba(34,193,255,0.15);
+  color: #22c1ff;
+  border: 1px solid rgba(34,193,255,0.3);
+  padding: 6px 10px;
+  border-radius: 6px;
+}
+
+.actions {
+  display: flex;
+  gap: 8px;
+}
+</style>
+</head>
+<body>
+
+<div class="page-wrapper">
+
+<nav>
+  <div class="flex-between">
+    <div>
+      <a href="index.html">Home</a>
+      <a href="admin_staff.html">Staff</a>
+      <a href="hotels.html">Hotels</a>
+    </div>
+    <div class="badge-admin">Admin — Bookings</div>
+  </div>
+</nav>
+
+<header style="background:linear-gradient(to right,#020617,#0f172a);padding:40px 0;border-bottom:1px solid var(--border);">
+  <div class="container text-center">
+    <h1>Manage Bookings</h1>
+    <p>View, filter, and manage all reservations</p>
+  </div>
+</header>
+
+<div class="main-content">
+<div class="container">
+
+<div class="toolbar">
+  <div>
+    <select id="statusFilter" onchange="loadAdminBookings()">
+      <option value="">All</option>
+      <option value="Pending">Pending</option>
+      <option value="Confirmed">Confirmed</option>
+      <option value="Cancelled">Cancelled</option>
+    </select>
+    <button class="secondary" onclick="loadAdminBookings()">Refresh</button>
+  </div>
+</div>
+
+<div class="card table-wrapper">
+<table>
+  <thead>
+    <tr>
+      <th>Booking ID</th>
+      <th>Guest</th>
+      <th>Room ID</th>
+      <th>Check-in</th>
+      <th>Check-out</th>
+      <th>Status</th>
+      <th>Total</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody id="adminBookingBody"></tbody>
+</table>
+</div>
+
+</div>
+</div>
+
+<footer style="background:var(--bg-secondary);border-top:1px solid var(--border);margin-top:40px;">
+  <div class="container text-center muted-text">
+    Hotel Management System © 2025
+  </div>
+</footer>
+
+</div>
+
+<script src="script.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  loadAdminBookings();
+});
+</script>
+
+</body>
+</html>

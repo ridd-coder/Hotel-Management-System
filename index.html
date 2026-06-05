@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Hotel Management System — Discover, book, and manage luxury hotel stays with elegance">
+<title>LuxeStay — Hotel Management System</title>
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+<!-- DB Connection Banner -->
+<div id="db-status-banner" style="display:none;position:fixed;top:0;left:0;right:0;z-index:9999;
+  padding:11px 24px;font-size:13px;font-weight:600;text-align:center;
+  backdrop-filter:blur(10px);transition:all 0.4s ease;box-shadow:0 2px 16px rgba(0,0,0,0.5);">
+  <span id="db-status-icon"></span>
+  <span id="db-status-text"></span>
+  <button onclick="document.getElementById('db-status-banner').style.display='none'"
+    style="margin-left:16px;background:transparent;border:1px solid currentColor;
+    color:inherit;border-radius:4px;padding:2px 10px;cursor:pointer;font-size:11px;">✕</button>
+</div>
+
+<!-- ── Navigation ── -->
+<nav id="main-nav">
+  <div class="flex-between">
+    <div style="display:flex;align-items:center;gap:32px;">
+      <div class="nav-logo">
+        <i class="fas fa-crown"></i> LuxeStay
+      </div>
+      <div>
+        <a href="index.html"><i class="fas fa-home" style="margin-right:6px;"></i>Home</a>
+        <a href="hotels.html"><i class="fas fa-hotel" style="margin-right:6px;"></i>Hotels</a>
+        <a href="mybookings.html"><i class="fas fa-calendar-check" style="margin-right:6px;"></i>Bookings</a>
+        <a href="login.html"><i class="fas fa-sign-in-alt" style="margin-right:6px;"></i>Login</a>
+      </div>
+    </div>
+    <span class="badge gold"><i class="fas fa-star"></i> Premium</span>
+  </div>
+</nav>
+
+<!-- ── Hero ── -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-overlay"></div>
+  <div class="hero-content fade-in">
+    <div class="hero-eyebrow">
+      <i class="fas fa-crown"></i> Luxury Redefined
+    </div>
+    <h1>Your Perfect Stay<br>Awaits You</h1>
+    <div class="hero-divider"></div>
+    <p>Discover world-class hotels, book with ease, and manage your reservations — all in one elegant platform.</p>
+    <div style="display:flex;gap:16px;justify-content:center;flex-wrap:wrap;">
+      <button onclick="window.location.href='hotels.html'">
+        <i class="fas fa-compass"></i> Explore Hotels
+      </button>
+      <button class="secondary" onclick="window.location.href='login.html'">
+        <i class="fas fa-user"></i> Guest Login
+      </button>
+    </div>
+  </div>
+</section>
+
+<!-- ── Stats Strip ── -->
+<div style="background:rgba(201,168,76,0.06);border-top:1px solid rgba(201,168,76,0.12);border-bottom:1px solid rgba(201,168,76,0.12);">
+  <div class="container" style="padding-top:28px;padding-bottom:28px;">
+    <div class="grid stagger" style="grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;">
+      <div class="stat-card fade-in">
+        <span class="stat-number">500+</span>
+        <span class="stat-label">Partner Hotels</span>
+      </div>
+      <div class="stat-card fade-in">
+        <span class="stat-number">50K+</span>
+        <span class="stat-label">Happy Guests</span>
+      </div>
+      <div class="stat-card fade-in">
+        <span class="stat-number">100+</span>
+        <span class="stat-label">Cities Covered</span>
+      </div>
+      <div class="stat-card fade-in">
+        <span class="stat-number">4.9★</span>
+        <span class="stat-label">Avg. Rating</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── Feature Cards ── -->
+<div class="container mt-4">
+  <div class="section-header">
+    <h2>Everything You Need</h2>
+    <div class="gold-divider"></div>
+    <p>A seamless experience from discovery to checkout, crafted for the modern traveller.</p>
+  </div>
+
+  <div class="grid stagger" style="grid-template-columns:repeat(auto-fit,minmax(270px,1fr));">
+
+    <div class="card fade-in" style="position:relative;overflow:hidden;">
+      <div class="card-accent-bar"></div>
+      <div class="feature-icon"><i class="fas fa-search"></i></div>
+      <h3>Find Your Stay</h3>
+      <p>Browse top-rated hotels across multiple cities with stunning photos and honest reviews.</p>
+      <button onclick="window.location.href='hotels.html'" style="margin-top:20px;">
+        <i class="fas fa-arrow-right"></i> Explore Hotels
+      </button>
+    </div>
+
+    <div class="card fade-in" style="position:relative;overflow:hidden;">
+      <div class="card-accent-bar"></div>
+      <div class="feature-icon"><i class="fas fa-calendar-alt"></i></div>
+      <h3>Effortless Booking</h3>
+      <p>Select rooms, choose dates, add premium services — all confirmed in just minutes.</p>
+      <button onclick="window.location.href='hotels.html'" style="margin-top:20px;">
+        <i class="fas fa-plus"></i> Start Booking
+      </button>
+    </div>
+
+    <div class="card fade-in" style="position:relative;overflow:hidden;">
+      <div class="card-accent-bar"></div>
+      <div class="feature-icon"><i class="fas fa-shield-alt"></i></div>
+      <h3>Secure Payment</h3>
+      <p>Multiple payment methods — Cards, UPI, NetBanking, Wallets — all transactions encrypted.</p>
+      <button onclick="window.location.href='login.html'" style="margin-top:20px;">
+        <i class="fas fa-lock"></i> Login to Pay
+      </button>
+    </div>
+
+    <div class="card fade-in" style="position:relative;overflow:hidden;">
+      <div class="card-accent-bar"></div>
+      <div class="feature-icon"><i class="fas fa-clipboard-list"></i></div>
+      <h3>Manage Bookings</h3>
+      <p>View reservations, track status in real time, and cancel when your plans change.</p>
+      <button onclick="window.location.href='mybookings.html'" style="margin-top:20px;">
+        <i class="fas fa-eye"></i> My Bookings
+      </button>
+    </div>
+
+  </div>
+</div>
+
+<!-- ── Why Choose Us ── -->
+<div class="container mt-4">
+  <div class="card shadow-lg" style="background:linear-gradient(135deg,rgba(15,20,40,0.9),rgba(7,9,15,0.95));">
+    <div class="section-header" style="margin-bottom:28px;">
+      <h2>Why Choose LuxeStay?</h2>
+      <div class="gold-divider"></div>
+      <p>The gold standard in hotel management platforms.</p>
+    </div>
+    <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:24px;">
+
+      <div style="text-align:center;padding:16px 12px;">
+        <div class="feature-icon" style="margin:0 auto 16px;">
+          <i class="fas fa-building"></i>
+        </div>
+        <h3 style="font-size:1.05rem;margin-bottom:8px;">Trusted Partners</h3>
+        <p style="font-size:0.88rem;">Curated selection of premium hotels vetted for quality and comfort.</p>
+      </div>
+
+      <div style="text-align:center;padding:16px 12px;">
+        <div class="feature-icon" style="margin:0 auto 16px;">
+          <i class="fas fa-tags"></i>
+        </div>
+        <h3 style="font-size:1.05rem;margin-bottom:8px;">Best Price Promise</h3>
+        <p style="font-size:0.88rem;">Transparent pricing — no hidden fees, no booking surprises.</p>
+      </div>
+
+      <div style="text-align:center;padding:16px 12px;">
+        <div class="feature-icon" style="margin:0 auto 16px;">
+          <i class="fas fa-headset"></i>
+        </div>
+        <h3 style="font-size:1.05rem;margin-bottom:8px;">24 / 7 Support</h3>
+        <p style="font-size:0.88rem;">Dedicated support available round the clock to assist you instantly.</p>
+      </div>
+
+      <div style="text-align:center;padding:16px 12px;">
+        <div class="feature-icon" style="margin:0 auto 16px;">
+          <i class="fas fa-bolt"></i>
+        </div>
+        <h3 style="font-size:1.05rem;margin-bottom:8px;">Instant Confirmation</h3>
+        <p style="font-size:0.88rem;">Book in under 2 minutes with real-time room availability updates.</p>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ── How It Works ── -->
+<div class="container mt-4">
+  <div class="section-header">
+    <h2>How It Works</h2>
+    <div class="gold-divider"></div>
+    <p>Four simple steps to your perfect hotel stay.</p>
+  </div>
+
+  <div class="grid stagger" style="grid-template-columns:repeat(auto-fit,minmax(230px,1fr));">
+
+    <div class="card fade-in" style="text-align:center;">
+      <div class="step-number" style="margin:0 auto 16px;">1</div>
+      <h3 style="font-size:1.05rem;">Create Account</h3>
+      <p style="font-size:0.88rem;">Sign up or login to access all booking features and saved preferences.</p>
+      <button class="secondary" onclick="window.location.href='login.html'" style="margin-top:16px;">
+        <i class="fas fa-user-plus"></i> Login
+      </button>
+    </div>
+
+    <div class="card fade-in" style="text-align:center;">
+      <div class="step-number" style="margin:0 auto 16px;">2</div>
+      <h3 style="font-size:1.05rem;">Choose Hotel</h3>
+      <p style="font-size:0.88rem;">Browse curated hotels by location, rating, and room type to find your match.</p>
+      <button class="secondary" onclick="window.location.href='hotels.html'" style="margin-top:16px;">
+        <i class="fas fa-hotel"></i> View Hotels
+      </button>
+    </div>
+
+    <div class="card fade-in" style="text-align:center;">
+      <div class="step-number" style="margin:0 auto 16px;">3</div>
+      <h3 style="font-size:1.05rem;">Book Your Room</h3>
+      <p style="font-size:0.88rem;">Select your room, set your dates, and add any services you desire.</p>
+      <button class="secondary" onclick="window.location.href='hotels.html'" style="margin-top:16px;">
+        <i class="fas fa-shopping-cart"></i> Book Now
+      </button>
+    </div>
+
+    <div class="card fade-in" style="text-align:center;">
+      <div class="step-number" style="margin:0 auto 16px;">4</div>
+      <h3 style="font-size:1.05rem;">Confirm & Enjoy</h3>
+      <p style="font-size:0.88rem;">Complete secure payment and receive your instant booking confirmation.</p>
+      <button class="secondary" onclick="window.location.href='mybookings.html'" style="margin-top:16px;">
+        <i class="fas fa-check-circle"></i> View Bookings
+      </button>
+    </div>
+
+  </div>
+</div>
+
+<!-- ── Support CTA ── -->
+<div class="container mt-4">
+  <div class="card" style="background:linear-gradient(135deg,rgba(201,168,76,0.07),rgba(110,168,254,0.04));border-color:rgba(201,168,76,0.25);">
+    <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:24px;">
+      <div>
+        <h2 style="margin-bottom:8px;">Need Assistance?</h2>
+        <p>Our concierge team is always ready to help you plan the perfect stay.</p>
+      </div>
+      <div style="display:flex;gap:28px;flex-wrap:wrap;">
+        <div>
+          <div style="font-size:0.72rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--primary);margin-bottom:6px;">Email</div>
+          <p style="color:var(--text);font-weight:500;">support@luxestay.com</p>
+        </div>
+        <div>
+          <div style="font-size:0.72rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--primary);margin-bottom:6px;">Phone</div>
+          <p style="color:var(--text);font-weight:500;">+91 99999 88888</p>
+        </div>
+        <div>
+          <div style="font-size:0.72rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--primary);margin-bottom:6px;">Live Chat</div>
+          <p style="color:var(--text);font-weight:500;">9 AM – 9 PM IST</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── Footer ── -->
+<footer>
+  <div class="footer-inner">
+    <div class="grid" style="grid-template-columns:2fr 1fr 1fr 1fr;gap:32px;">
+
+      <div>
+        <div class="footer-brand"><i class="fas fa-crown" style="color:var(--primary);"></i> LuxeStay</div>
+        <p style="max-width:280px;line-height:1.8;">Your premium hotel booking platform — designed for those who appreciate elegance, comfort, and effortless service.</p>
+        <div class="social-links" style="margin-top:20px;">
+          <a href="#"><i class="fab fa-twitter"></i></a>
+          <a href="#"><i class="fab fa-instagram"></i></a>
+          <a href="#"><i class="fab fa-facebook-f"></i></a>
+          <a href="#"><i class="fab fa-linkedin-in"></i></a>
+        </div>
+      </div>
+
+      <div>
+        <h4>Quick Links</h4>
+        <a href="index.html">Home</a>
+        <a href="hotels.html">Hotels</a>
+        <a href="mybookings.html">My Bookings</a>
+        <a href="login.html">Login</a>
+      </div>
+
+      <div>
+        <h4>Support</h4>
+        <a href="#">Help Center</a>
+        <a href="#">Contact Us</a>
+        <a href="#">Cancellation Policy</a>
+        <a href="#">FAQ</a>
+      </div>
+
+      <div>
+        <h4>Legal</h4>
+        <a href="#">Terms of Service</a>
+        <a href="#">Privacy Policy</a>
+        <a href="#">Cookie Policy</a>
+        <a href="#">Refund Policy</a>
+      </div>
+
+    </div>
+
+    <div class="footer-divider"></div>
+
+    <div class="footer-bottom">
+      <p>© 2025 LuxeStay Hotel Management. All rights reserved.</p>
+      <p>Crafted with <i class="fas fa-heart" style="color:var(--primary);margin:0 4px;"></i> for discerning travellers.</p>
+    </div>
+  </div>
+</footer>
+
+<script src="script.js"></script>
+<script>
+window.addEventListener("DOMContentLoaded", () => {
+
+  /* Nav scroll shadow */
+  window.addEventListener("scroll", () => {
+    document.getElementById("main-nav").classList.toggle("shadow-md", window.scrollY > 10);
+  });
+
+  /* Card glow on buttons */
+  document.querySelectorAll("button").forEach(btn => {
+    btn.addEventListener("mouseenter", () => btn.classList.add("glow"));
+    btn.addEventListener("mouseleave", () => btn.classList.remove("glow"));
+  });
+
+  /* ── DB Status Banner ── */
+  const banner     = document.getElementById("db-status-banner");
+  const bannerIcon = document.getElementById("db-status-icon");
+  const bannerText = document.getElementById("db-status-text");
+
+  fetch("http://localhost:4000/db-status")
+    .then(r => r.json())
+    .then(data => {
+      banner.style.display = "block";
+      if (data.connected && data.insertTest && data.selectTest) {
+        banner.style.background = "rgba(16,185,129,0.12)";
+        banner.style.border     = "1px solid rgba(16,185,129,0.4)";
+        banner.style.color      = "#6ee7b7";
+        bannerIcon.textContent  = "✅ ";
+        bannerText.textContent  = data.message +
+          " | DB: " + (data.database || "") +
+          " | Host: " + (data.host || "localhost") +
+          " | Last check ID: #" + (data.recordId || "–");
+        setTimeout(() => { banner.style.display = "none"; }, 8000);
+      } else if (data.connected) {
+        banner.style.background = "rgba(251,191,36,0.12)";
+        banner.style.border     = "1px solid rgba(251,191,36,0.4)";
+        banner.style.color      = "#fcd34d";
+        bannerIcon.textContent  = "⚠️  ";
+        bannerText.textContent  = data.message;
+      } else {
+        banner.style.background = "rgba(248,113,113,0.12)";
+        banner.style.border     = "1px solid rgba(248,113,113,0.4)";
+        banner.style.color      = "#fca5a5";
+        bannerIcon.textContent  = "❌ ";
+        bannerText.textContent  = data.message;
+      }
+    })
+    .catch(() => {
+      banner.style.display    = "block";
+      banner.style.background = "rgba(248,113,113,0.12)";
+      banner.style.border     = "1px solid rgba(248,113,113,0.4)";
+      banner.style.color      = "#fca5a5";
+      bannerIcon.textContent  = "❌ ";
+      bannerText.textContent  = "Backend server not reachable. Make sure the Node.js server is running on port 4000.";
+    });
+
+});
+</script>
+
+</body>
+</html>

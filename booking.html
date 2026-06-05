@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Book Room</title>
+<link rel="stylesheet" href="style.css">
+<style>
+.page-wrapper {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.main-content {
+  flex: 1;
+}
+
+.booking-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 20px;
+}
+
+.summary-card {
+  position: sticky;
+  top: 20px;
+}
+
+.row {
+  display: flex;
+  justify-content: space-between;
+  margin: 8px 0;
+}
+
+.label {
+  color: var(--muted);
+}
+
+.value {
+  font-weight: 600;
+}
+
+.total-row {
+  font-size: 18px;
+  margin-top: 15px;
+  padding-top: 10px;
+  border-top: 1px solid var(--border);
+}
+
+.service-list-preview p {
+  margin: 6px 0;
+}
+
+.badge-small {
+  display: inline-block;
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-size: 12px;
+  background: rgba(34,193,255,0.15);
+  color: #22c1ff;
+  border: 1px solid rgba(34,193,255,0.3);
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+</style>
+</head>
+<body>
+
+<div class="page-wrapper">
+
+<nav>
+  <div class="flex-between">
+    <div>
+      <a href="index.html">Home</a>
+      <a href="hotels.html">Hotels</a>
+      <a href="mybookings.html">My Bookings</a>
+    </div>
+    <div class="badge success">Booking</div>
+  </div>
+</nav>
+
+<header style="background:linear-gradient(to right,#020617,#0f172a);padding:40px 0;border-bottom:1px solid var(--border);">
+  <div class="container text-center">
+    <h1>Confirm Your Stay</h1>
+    <p>Select dates and services to proceed</p>
+  </div>
+</header>
+
+<div class="main-content">
+
+<div class="container">
+
+<div class="booking-grid">
+
+<div class="card">
+
+<div class="section-header">
+  <h3>Room Details</h3>
+  <span class="badge-small">Room ID: <span id="selectedRoomId"></span></span>
+</div>
+
+<p><span class="label">Guest:</span> <span id="guestName"></span></p>
+<p><span class="label">Guest ID:</span> <span id="guestIdDisplay"></span></p>
+<p><span class="label">Price per night:</span> ₹<span id="pricePerNight"></span></p>
+
+<hr>
+
+<h3>Select Dates</h3>
+
+<div class="grid" style="grid-template-columns:1fr 1fr;gap:10px;">
+  <div>
+    <label>Check-in</label>
+    <input type="date" id="checkIn">
+  </div>
+  <div>
+    <label>Check-out</label>
+    <input type="date" id="checkOut">
+  </div>
+</div>
+
+<p><b>Nights:</b> <span id="nights">0</span></p>
+
+<hr>
+
+<div class="section-header">
+  <h3>Extra Services</h3>
+  <span class="badge-small">Optional</span>
+</div>
+
+<div id="serviceList" style="margin-top:10px;"></div>
+
+</div>
+
+<div class="card summary-card">
+
+<h3>Booking Summary</h3>
+
+<div class="row">
+  <span class="label">Price per night</span>
+  <span class="value">₹<span id="summaryPrice">0</span></span>
+</div>
+
+<div class="row">
+  <span class="label">Nights</span>
+  <span class="value"><span id="summaryNights">0</span></span>
+</div>
+
+<div class="row">
+  <span class="label">Room subtotal</span>
+  <span class="value">₹<span id="roomSubtotal">0</span></span>
+</div>
+
+<div style="margin-top:15px;">
+  <h4>Selected Services</h4>
+  <div class="service-list-preview" id="selectedServicesPreview">None</div>
+</div>
+
+<div class="row">
+  <span class="label">Service total</span>
+  <span class="value">₹<span id="serviceTotal">0</span></span>
+</div>
+
+<div class="row total-row">
+  <span>Grand Total</span>
+  <span class="value">₹<span id="grandTotal">0</span></span>
+</div>
+
+<input type="hidden" id="totalAmount">
+
+<div style="margin-top:15px;">
+  <button onclick="saveBooking()">Proceed to Payment</button>
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<footer style="background:var(--bg-secondary);border-top:1px solid var(--border);margin-top:40px;">
+  <div class="container text-center muted-text">
+    Hotel Management System © 2025
+  </div>
+</footer>
+
+<script src="script.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  // Re-run totals when any service checkbox changes
+  document.addEventListener("change", (e) => {
+    if (e.target.classList.contains("serviceCheck")) {
+      updateServicePreview();
+      updateTotals();
+    }
+  });
+});
+
+function updateServicePreview() {
+  const selected = Array.from(document.querySelectorAll(".serviceCheck:checked"));
+  const box = document.getElementById("selectedServicesPreview");
+  if (!box) return;
+
+  if (selected.length === 0) {
+    box.innerText = "None";
+    return;
+  }
+
+  box.innerHTML = "";
+  selected.forEach(c => {
+    const p = document.createElement("p");
+    p.style.margin = "4px 0";
+    p.innerText = `${c.getAttribute("data-name")} — ₹${parseFloat(c.getAttribute("data-cost")).toLocaleString("en-IN")}`;
+    box.appendChild(p);
+  });
+}
+
+function updateTotals() {
+  // Use data-price attribute for reliable parsing (innerText may have commas)
+  const priceEl = document.getElementById("pricePerNight");
+  const price   = parseFloat(priceEl?.getAttribute("data-price") || priceEl?.innerText?.replace(/,/g, "") || "0");
+  const nights  = parseInt(document.getElementById("summaryNights")?.innerText || "0");
+
+  const roomSubtotal = price * nights;
+  const roomSubtotalEl = document.getElementById("roomSubtotal");
+  if (roomSubtotalEl) roomSubtotalEl.innerText = roomSubtotal.toLocaleString("en-IN");
+
+  let serviceTotal = 0;
+  document.querySelectorAll(".serviceCheck:checked").forEach(c => {
+    serviceTotal += parseFloat(c.getAttribute("data-cost") || "0");
+  });
+
+  const serviceTotalEl = document.getElementById("serviceTotal");
+  if (serviceTotalEl) serviceTotalEl.innerText = serviceTotal.toLocaleString("en-IN");
+
+  const grand = roomSubtotal + serviceTotal;
+  const grandTotalEl = document.getElementById("grandTotal");
+  if (grandTotalEl) grandTotalEl.innerText = grand.toLocaleString("en-IN");
+
+  const totalAmountEl = document.getElementById("totalAmount");
+  if (totalAmountEl) totalAmountEl.value = grand;
+}
+</script>
+
+</body>
+</html>

@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin — Staff Management</title>
+<link rel="stylesheet" href="style.css">
+<style>
+.page-wrapper {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.main-content {
+  flex: 1;
+}
+
+.admin-grid {
+  display: grid;
+  grid-template-columns: 1.6fr 1fr;
+  gap: 20px;
+}
+
+.table-wrapper {
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th, td {
+  padding: 10px;
+  border-bottom: 1px solid var(--border);
+  text-align: left;
+}
+
+th {
+  background: var(--bg-secondary);
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+}
+
+.row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.actions {
+  display: flex;
+  gap: 8px;
+}
+
+.badge-admin {
+  background: rgba(34,193,255,0.15);
+  color: #22c1ff;
+  border: 1px solid rgba(34,193,255,0.3);
+  padding: 6px 10px;
+  border-radius: 6px;
+}
+
+.toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+</style>
+</head>
+<body>
+
+<div class="page-wrapper">
+
+<nav>
+  <div class="flex-between">
+    <div>
+      <a href="index.html">Home</a>
+      <a href="hotels.html">Hotels</a>
+      <a href="mybookings.html">My Bookings</a>
+    </div>
+    <div class="badge-admin">Admin — Staff</div>
+  </div>
+</nav>
+
+<header style="background:linear-gradient(to right,#020617,#0f172a);padding:40px 0;border-bottom:1px solid var(--border);">
+  <div class="container text-center">
+    <h1>Staff Management</h1>
+    <p>View, add, edit, and delete staff members</p>
+  </div>
+</header>
+
+<div class="main-content">
+<div class="container">
+
+<div class="toolbar">
+  <div>
+    <select id="adminHotelSelect"></select>
+    <button class="secondary" onclick="loadAdminStaff()">Load Staff</button>
+  </div>
+  <div>
+    <button onclick="clearStaffForm()">New Staff</button>
+  </div>
+</div>
+
+<div class="admin-grid">
+
+<div class="card table-wrapper">
+<h3>Staff List</h3>
+<table>
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Name</th>
+      <th>Role</th>
+      <th>Salary</th>
+      <th>Shift</th>
+      <th>Hotel</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody id="staffTableBody"></tbody>
+</table>
+</div>
+
+<div class="card">
+<h3 id="formTitle">Add Staff</h3>
+
+<div class="form-grid">
+  <input type="hidden" id="editStaffId">
+
+  <label>Name</label>
+  <input type="text" id="staffName">
+
+  <label>Role</label>
+  <input type="text" id="staffRole">
+
+  <label>Salary</label>
+  <input type="number" id="staffSalary">
+
+  <label>Shift</label>
+  <select id="staffShift">
+    <option value="Day">Day</option>
+    <option value="Night">Night</option>
+  </select>
+
+  <label>Hotel</label>
+  <select id="staffHotel"></select>
+
+  <div class="row" style="margin-top:10px;">
+    <button onclick="addStaff()" id="addBtn">Add Staff</button>
+    <button class="secondary" onclick="updateStaff()" id="updateBtn" style="display:none;">Update Staff</button>
+  </div>
+</div>
+</div>
+
+</div>
+</div>
+
+<footer style="background:var(--bg-secondary);border-top:1px solid var(--border);margin-top:40px;">
+  <div class="container text-center muted-text">
+    Hotel Management System © 2025
+  </div>
+</footer>
+
+</div>
+
+<script src="script.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  loadAdminHotels();
+  loadAdminStaff();
+});
+</script>
+
+</body>
+</html>
