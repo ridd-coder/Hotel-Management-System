@@ -82,7 +82,7 @@ The database includes the following entities:
 
 The landing page of LuxeStay showcasing luxury hotel booking features.
 
-![Home Page] <img width="1470" height="836" alt="a" src="https://github.com/user-attachments/assets/bfa4669d-316b-4ad7-bfbd-751269423403" />
+<img width="1470" height="836" alt="a" src="https://github.com/user-attachments/assets/bfa4669d-316b-4ad7-bfbd-751269423403" />
 
 
 ---
@@ -91,7 +91,7 @@ The landing page of LuxeStay showcasing luxury hotel booking features.
 
 Users can browse available hotels, search by location, and apply filters.
 
-![Hotels Page]<img width="1470" height="810" alt="b" src="https://github.com/user-attachments/assets/81081b0c-ff24-4eec-b4ad-3d1af1e454d5" />
+<img width="1470" height="810" alt="b" src="https://github.com/user-attachments/assets/81081b0c-ff24-4eec-b4ad-3d1af1e454d5" />
 
 ---
 
@@ -99,7 +99,7 @@ Users can browse available hotels, search by location, and apply filters.
 
 Users can manage and filter reservations using booking ID, status, and date ranges.
 
-![Bookings Page]<img width="1470" height="807" alt="c" src="https://github.com/user-attachments/assets/576a487d-8709-478c-b2b1-bc60862b3a85" />
+<img width="1470" height="807" alt="c" src="https://github.com/user-attachments/assets/576a487d-8709-478c-b2b1-bc60862b3a85" />
 
 ---
 
@@ -107,7 +107,7 @@ Users can manage and filter reservations using booking ID, status, and date rang
 
 Displays all reservations along with payment details and receipt generation options.
 
-![Booking History]<img width="1470" height="804" alt="d" src="https://github.com/user-attachments/assets/3fc8bcaf-ed03-4a27-96ef-6c5a088e874d" />
+<img width="1470" height="804" alt="d" src="https://github.com/user-attachments/assets/3fc8bcaf-ed03-4a27-96ef-6c5a088e874d" />
 
 ---
 
@@ -115,7 +115,7 @@ Displays all reservations along with payment details and receipt generation opti
 
 Detailed reservation information including room ID, booking status, check-in/check-out dates, and payment amount.
 
-![Reservation Details]<img width="1470" height="956" alt="e" src="https://github.com/user-attachments/assets/4487436e-69db-4c95-bb0e-0ba95849288a" />
+<img width="1470" height="956" alt="e" src="https://github.com/user-attachments/assets/4487436e-69db-4c95-bb0e-0ba95849288a" />
 
 ---
 
